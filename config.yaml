@@ -1,0 +1,6 @@
+host: 192.168.1.1
+port: 23
+username: user
+password: 
+file_path: /config/workb/backup_lastgood.xml
+pattern: aucTeleAccountPassword
