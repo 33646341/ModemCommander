@@ -28,7 +28,7 @@
    uv sync
 
    # 或传统方式
-   pip install aiohttp telnetlib3 pyyaml
+   pip install aiohttp telnetlib3 pyyaml pycryptodome loguru
    ```
 
 3. 配置文件：修改 `config.yaml` 文件，把 `password` 填写为光猫背面的管理密码。
