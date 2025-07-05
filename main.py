@@ -1,5 +1,6 @@
 import asyncio
 import json
+import sys
 
 import aiohttp
 import telnetlib3
@@ -71,10 +72,10 @@ async def open_telnet(host: str, port: str):
 
     async with aiohttp.ClientSession() as session:
         async with session.post(url, data=data) as response:
+            logger.debug(json.loads(await response.text()))
             if response.status != 200:
                 logger.error(f"Failed to enable Telnet on {host}:{port}")
                 exit(1)
-            logger.debug(json.loads(await response.text()))
 
 
 async def login(host: str, password: str):
@@ -87,12 +88,17 @@ async def login(host: str, password: str):
 
     async with aiohttp.ClientSession() as session:
         async with session.get(url, data=data) as response:
-            logger.debug(f"Status: {response.status}")
-            logger.debug(await response.text())
+            logger.debug(json.loads(await response.text()))
+            if response.status != 200:
+                logger.error(f"Failed to login to {host}")
+                exit(1)
             return response.headers.get("token")
 
 
 async def main():
+    logger.remove()
+    logger.add("debug.log", rotation="1 MB", level="DEBUG")
+    logger.add(sys.stdout, level="WARNING")
     load_config()
     password = await telnet_password(HOST, PORT, USERNAME, PASSWORD, FILE_PATH, PATTERN)
     print(f"Password: {password}")
